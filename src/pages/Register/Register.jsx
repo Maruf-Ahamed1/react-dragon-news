@@ -1,54 +1,72 @@
-import { useContext } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../Shared/Navbar/Navbar";
+import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
-import { Link,useLocation, useNavigate } from "react-router-dom/dist/umd/react-router-dom.development";
 
 
-const Login = () => {
+const Register = () => {
 
- const {signIn} = useContext(AuthContext)
-  const location = useLocation();
-  const navigate = useNavigate()
-  console.log('location i n the login page',location)
+  const {createUser} = useContext(AuthContext);
 
-
-
-    const handleLogin = e =>{
+    const handleRegister = e =>{
         e.preventDefault ();
         // const email = e.target.email.value
         // const password = e.target.password.value
         // console.log(email,password)
-
         console.log(e.currentTarget)
         const form = new FormData(e.currentTarget)
+        const name = form.get('name')
+        const photo = form.get('photo')
         const email = form.get('email')
         const password = form.get('password')
-        console.log(email,password)
-        //_______create singIn_______-//
-        signIn(email,password)
+        console.log(name,photo,email,password)
+
+        //_______create user_______-//
+        createUser(email,password)
         .then(result=>{
           console.log(result.user)
-          //______Navigate after login_____//
-          navigate(location ?.state ? location.state : '/' );
-
         })
         .catch(error=>{
-          console.error(error)
+          console.log(error)
         })
-
     }
 
-  return (
-    <div>
-      <Navbar></Navbar>
+    return (
+        <div>
+              <Navbar></Navbar>
          <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col ">
           <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Login now!</h1>
+            <h1 className="text-5xl font-bold">Register now!</h1>
   
           </div>
           <div className="card shrink-0 shadow-2xl bg-base-100">
-            <form onSubmit={handleLogin} className="card-body w-96">
+            <form onSubmit={handleRegister} className="card-body w-96">
+            <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Name</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Your Name"
+                  className="input input-bordered"
+                  required
+                />
+                
+              </div> <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Photo URL</span>
+                </label>
+                <input
+                  type="text"
+                  name="photo"
+                  placeholder="Photo url"
+                  className="input input-bordered"
+                  required
+                />
+               
+              </div>
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -79,15 +97,15 @@ const Login = () => {
                 </label>
               </div>
               <div className="form-control mt-6">
-                <button className="btn btn-primary">Login</button>
+                <button className="btn btn-secondary">Register</button>
               </div>
             </form>
-            <p className="mx-auto mb-5"> Do not have an account <Link className="text-blue-600 font-bold" to="/register">Register</Link> </p>
+            <p className="mx-auto mb-5"> Already have an account <Link className="text-blue-600 font-bold" to="/login">Login</Link> </p>
           </div>
         </div>
       </div>
-    </div>
-  );
+        </div>
+    );
 };
 
-export default Login;
+export default Register;
